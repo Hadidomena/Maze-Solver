@@ -5,15 +5,14 @@ typedef struct _position
 {
     int current_character;
     int len_of_line;
+    char value_of_field;
 } position;
 
-position * create(FILE maze, int current_character);
+position * create(char * maze, int current_character, char value_of_field);
 
-int move_up(position * current_position);
+int * get_adjacent(position * current_position, char * maze, int came_from);
 
-int move_right(position * current_position);
+position * find_start(char * maze);
 
-int move_down(position * current_position);
-
-int move_left(position * current_position);
+position * find_end(char * maze);
 #endif
