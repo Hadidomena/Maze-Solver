@@ -2,25 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-position * create( char * maze, int current_character, char value_of_field ) {
-    FILE * file;
+position * create( int current_character, char value_of_field ) {
     position * curr_position = (position *) malloc(sizeof(position));
-
-    file = fopen(maze, "r+");
-    char buffer[1]; int x = 0;
-    while ( buffer ) {
-        fseek( file, x, SEEK_SET );
-        fread( buffer, 1, 1, file );
-        if ( buffer[0] == '\n' ) {
-            break;
-        }
-        x++;
-    }
-
-    curr_position->len_of_line = x + 1;
     curr_position->current_character = current_character;
     curr_position->value_of_field = value_of_field;
-
     return curr_position;
 }
 
@@ -36,7 +21,7 @@ position * find_start(char * maze) {
         }
         x++;
     }
-    return create(maze, x, 'a');
+    return create( x, 'a');
 }
 
 position * find_end(char * maze) {
@@ -51,14 +36,10 @@ position * find_end(char * maze) {
         }
         x++;
     }
-    return create(maze, x, 'K');
-
+    return create( x, 'K');
 }
-
-int * get_adjacent(position * current_position, char * maze, int came_from) {
-
-    int* result; int len_of_result = 0; char buffer[1];
-    FILE* file = fopen(maze, "r+");
-
-
+void free_position(position* pos) {
+    if (pos != NULL) {
+        free(pos); // Free memory allocated for position struct
+    }
 }

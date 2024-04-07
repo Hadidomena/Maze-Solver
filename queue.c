@@ -48,3 +48,14 @@ position dequeue(Queue* q) {
 int isEmpty(Queue* q) {
     return (q->front == NULL);
 }
+void destroyQueue(Queue* q) {
+    if (q != NULL) {
+        Node* current = q->front;
+        while (current != NULL) {
+            Node* temp = current;
+            current = current->next;
+            free(temp); // Free memory allocated for node
+        }
+        free(q); // Free memory allocated for queue
+    }
+}

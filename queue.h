@@ -17,4 +17,5 @@ Queue* createQueue();
 void enqueue(Queue* q, position value);
 position dequeue(Queue* q);
 int isEmpty(Queue* q);
+void destroyQueue(Queue* q);
 #endif
