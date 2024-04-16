@@ -59,3 +59,33 @@ void destroyQueue(Queue* q) {
         free(q); // Free memory allocated for queue
     }
 }
+
+void writeToQueue(const char *data, const char *filename) {
+    FILE *file = fopen(filename, "a"); // Open file in append mode
+    if (file == NULL) {
+        printf("Error opening file for writing.\n");
+        return;
+    }
+    fprintf(file, "%s\n", data); // Write data to the file
+    fclose(file); // Close the file
+}
+
+// Function to read data from the file
+char *readFromQueue(const char *filename, long *pos) {
+    FILE *file = fopen(filename, "r"); // Open file in read mode
+    if (file == NULL) {
+        printf("Error opening file for reading.\n");
+        return NULL;
+    }
+    fseek(file, *pos, SEEK_SET); // Move the file pointer to the current position
+    char *data = malloc(256 * sizeof(char)); // Allocate memory to store data
+    if (data == NULL) {
+        printf("Error allocating memory.\n");
+        fclose(file);
+        return NULL;
+    }
+    fgets(data, 256, file); // Read one line from the file
+    *pos = ftell(file); // Update the current position
+    fclose(file); // Close the file
+    return data; // Return the read data
+}

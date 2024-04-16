@@ -180,12 +180,14 @@ int bfs_traverse_file(char* maze) {
     position * start = find_start(maze);
     position * end = find_end(maze);
     position current;
-    Queue* que = createQueue();
-    if ( que == NULL ) {
-        fclose(file);
-        return 0;
-    }
-    enqueue( que, *start );
+    int curr_int; char curr_char;
+
+
+    const char *filename1 = "queue1.txt";
+    const char *filename2 = "queue2.txt";
+    char data[10];
+    long pos1 = 0;
+    long pos2 = 0;
 
     while ( buffer ) {
         fseek( file, x, SEEK_SET );
@@ -197,65 +199,62 @@ int bfs_traverse_file(char* maze) {
     }
     len_of_line = x + 1;
 
-    while( !isEmpty( que ) )
+    while( true )
     {
-        current = dequeue(que);
+        curr_int = atoi(readFromQueue(filename1, &pos1));
+        curr_char = readFromQueue(filename2, &pos2)[0];
 
-        if ( current.current_character != start->current_character ) {
-            fseek( file, current.current_character, SEEK_SET);
-            fwrite(&current.value_of_field, 1, sizeof(current.value_of_field), file );
+        if ( curr_int != start->current_character ) {
+            fseek( file, curr_int, SEEK_SET);
+            fwrite(&curr_char, 1, sizeof(curr_char), file );
         }
 
-        fseek( file, current.current_character - 1, SEEK_SET );
+        fseek( file, curr_int - 1, SEEK_SET );
         fread( buffer, 1, 1, file );
 
         if ( buffer[0] == ' ' ) {
-            new[0] = current.current_character - 1;
+            new[0] = curr_int - 1;
         } else if ( buffer[0] == 'K' ) {
-            destroyQueue(que);
             return len_of_line;
         } else {
             new[0] = -1;
         }
 
-        fseek( file, current.current_character + 1, SEEK_SET );
+        fseek( file, curr_int + 1, SEEK_SET );
         fread( buffer, 1, 1, file );
 
         if ( buffer[0] == ' ' ) {
-            new[1] = current.current_character + 1;
+            new[1] = curr_int + 1;
         } else if ( buffer[0] == 'K' ) {
-            destroyQueue(que);
             return len_of_line;
         } else {
             new[1] = -1;
         }
 
-        fseek( file, current.current_character - len_of_line, SEEK_SET );
+        fseek( file, curr_int - len_of_line, SEEK_SET );
         fread( buffer, 1, 1, file );
 
         if ( buffer[0] == ' ' ) {
-            new[2] = current.current_character - len_of_line;
+            new[2] = curr_int - len_of_line;
         } else if ( buffer[0] == 'K' ) {
-            destroyQueue(que);
             return len_of_line;
         } else {
             new[2] = -1;
         }
 
-        fseek( file, current.current_character + len_of_line, SEEK_SET );
+        fseek( file, curr_int + len_of_line, SEEK_SET );
         fread( buffer, 1, 1, file );
 
         if ( buffer[0] == ' ' ) {
-            new[3] = current.current_character + len_of_line;
+            new[3] = curr_int + len_of_line;
         } else if ( buffer[0] == 'K' ) {
-            destroyQueue(que);
             return len_of_line;
         } else {
             new[3] = -1;
         }
 
-        if ( current.value_of_field < 'z' ) {
-            buffer[0] = current.value_of_field + 1;
+        if ( curr_char < 'z' ) {
+            buffer[0] = curr_char + 1;
         } else {
             buffer[0] = 'a';
         }
@@ -264,9 +263,11 @@ int bfs_traverse_file(char* maze) {
         {
             if ( new[x] >= 0 )
             {
-                enqueue( que, *create( new[x], buffer[0] ));
+                sprintf(data, "%d", new[x]);
+                writeToQueue(data, filename1);
+                sprintf(data, "%c", buffer[0]);
+                writeToQueue(data, filename2);
             }
         }
     }
-    destroyQueue(que);
 }
