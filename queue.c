@@ -71,21 +71,14 @@ void writeToQueue(const char *data, const char *filename) {
 }
 
 // Function to read data from the file
-char *readFromQueue(const char *filename, long *pos) {
+void readFromQueue(const char *filename, long *pos, char *buffer, size_t bufferSize) {
     FILE *file = fopen(filename, "r"); // Open file in read mode
     if (file == NULL) {
         printf("Error opening file for reading.\n");
-        return NULL;
+        return;
     }
     fseek(file, *pos, SEEK_SET); // Move the file pointer to the current position
-    char *data = malloc(256 * sizeof(char)); // Allocate memory to store data
-    if (data == NULL) {
-        printf("Error allocating memory.\n");
-        fclose(file);
-        return NULL;
-    }
-    fgets(data, 256, file); // Read one line from the file
+    fgets(buffer, bufferSize, file); // Read one line from the file into the buffer
     *pos = ftell(file); // Update the current position
     fclose(file); // Close the file
-    return data; // Return the read data
 }

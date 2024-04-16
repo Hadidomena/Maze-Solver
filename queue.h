@@ -19,5 +19,5 @@ position dequeue(Queue* q);
 int isEmpty(Queue* q);
 void destroyQueue(Queue* q);
 void writeToQueue(const char *data, const char *filename);
-char *readFromQueue(const char *filename, long *pos);
+void readFromQueue(const char *filename, long *pos, char *buffer, size_t bufferSize);
 #endif

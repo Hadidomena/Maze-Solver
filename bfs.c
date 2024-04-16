@@ -205,8 +205,11 @@ int bfs_traverse_file(char* maze) {
 
     while( true )
     {
-        curr_int = atoi(readFromQueue(filename1, &pos1));
-        curr_char = readFromQueue(filename2, &pos2)[0];
+        readFromQueue(filename1, &pos1, data, sizeof(data));
+        curr_int = atoi(data);
+        readFromQueue(filename2, &pos2, data, sizeof(data));
+        curr_char = data[0];
+        printf("%s\n", data);
 
         if ( curr_int != start->current_character ) {
             fseek( file, curr_int, SEEK_SET);
