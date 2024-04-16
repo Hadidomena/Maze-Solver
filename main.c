@@ -6,19 +6,26 @@
 
 int main( int argc, char* argv[] ) {
 
+    int len_of_line;
     char* file_name = argv[1];
 
-    FILE* file = fopen(file_name, "r+");
-
-    if (file == NULL) {
-        perror("Error opening file");
-        return EXIT_FAILURE;
-    }
+    position * start = find_start(file_name);
+    position * end = find_end(file_name);
 
     // Traverse the file using BFS
-    bfs_traverse_file(file_name);
+    len_of_line = bfs_traverse_file(file_name);
 
-    // Close the file
-    fclose(file);
+    printf("After traverse\n");
+
+    backtrack(file_name, start->current_character, end->current_character, len_of_line);
+
+    printf("output created\n");
+
     reverseLines();
+
+    remove("output.txt");
+
+    printf("End\n");
+
+    return 0;
 }

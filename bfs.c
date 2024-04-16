@@ -6,6 +6,7 @@
 
 void reverseLines() {
     int ch; int i; int count;
+
     // Open the output file for reading
     FILE *outputFile = fopen("output.txt", "r+");
     if (outputFile == NULL) {
@@ -21,10 +22,10 @@ void reverseLines() {
         return;
     }
 
-    // Buffer to store each line read from the output file
-    char line[31]; // Assuming no line is longer than 30 characters
+    char line[31];
 
     fseek(outputFile, 0, SEEK_END);
+
     while (ftell(outputFile) > 1 ){
         fseek(outputFile, -2, SEEK_CUR);
         if (ftell(outputFile) <= 2) {break;}
@@ -42,9 +43,7 @@ void reverseLines() {
         fprintf(instructionsFile, "\n");
     }
     fclose(outputFile);
-
-    // Delete the output file
-    remove("output.txt");
+    fclose(instructionsFile);
 }
 
 void backtrack(char * maze, int end, int start, int len_of_line ) {
@@ -65,7 +64,6 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 current = current - 1;
                 current_char = buffer[0];
                 direction = 0;
-                fprintf(output, "Forward 1\nTurn Left\n");
             }
 
             fseek( file, current + len_of_line, SEEK_SET );
@@ -84,7 +82,6 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 current = current + 1;
                 current_char = buffer[0];
                 direction = 2;
-                fprintf(output, "Forward 1\nTurn Right\n");
             }
 
             fseek( file, current - len_of_line, SEEK_SET );
@@ -175,8 +172,9 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
         fprintf(output, "Forward %i\n", length + 1);
     }
     fprintf(output, "Start\n");
+    fclose(output);
 }
-void bfs_traverse_file(char* maze) {
+int bfs_traverse_file(char* maze) {
     int x = 0; FILE* file; int new[4]; int len_of_line; char buffer[1];
     file = fopen(maze, "r+");
     position * start = find_start(maze);
@@ -185,7 +183,7 @@ void bfs_traverse_file(char* maze) {
     Queue* que = createQueue();
     if ( que == NULL ) {
         fclose(file);
-        return;
+        return 0;
     }
     enqueue( que, *start );
 
@@ -214,8 +212,8 @@ void bfs_traverse_file(char* maze) {
         if ( buffer[0] == ' ' ) {
             new[0] = current.current_character - 1;
         } else if ( buffer[0] == 'K' ) {
-            backtrack(maze, start->current_character, end->current_character, len_of_line);
-            return ;
+            destroyQueue(que);
+            return len_of_line;
         } else {
             new[0] = -1;
         }
@@ -226,8 +224,8 @@ void bfs_traverse_file(char* maze) {
         if ( buffer[0] == ' ' ) {
             new[1] = current.current_character + 1;
         } else if ( buffer[0] == 'K' ) {
-            backtrack(maze, start->current_character, end->current_character, len_of_line);
-            return ;
+            destroyQueue(que);
+            return len_of_line;
         } else {
             new[1] = -1;
         }
@@ -238,8 +236,8 @@ void bfs_traverse_file(char* maze) {
         if ( buffer[0] == ' ' ) {
             new[2] = current.current_character - len_of_line;
         } else if ( buffer[0] == 'K' ) {
-            backtrack(maze, start->current_character, end->current_character, len_of_line);
-            return ;
+            destroyQueue(que);
+            return len_of_line;
         } else {
             new[2] = -1;
         }
@@ -250,8 +248,8 @@ void bfs_traverse_file(char* maze) {
         if ( buffer[0] == ' ' ) {
             new[3] = current.current_character + len_of_line;
         } else if ( buffer[0] == 'K' ) {
-            backtrack(maze, start->current_character, end->current_character, len_of_line);
-            return;
+            destroyQueue(que);
+            return len_of_line;
         } else {
             new[3] = -1;
         }
