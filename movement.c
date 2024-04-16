@@ -38,8 +38,6 @@ position * find_end(char * maze) {
     }
     return create( x, 'K');
 }
-void free_position(position* pos) {
-    if (pos != NULL) {
-        free(pos); // Free memory allocated for position struct
-    }
+void free_position(position *pos) {
+    free(pos);
 }
