@@ -182,12 +182,16 @@ int bfs_traverse_file(char* maze) {
     position current;
     int curr_int; char curr_char;
 
-
     const char *filename1 = "queue1.txt";
     const char *filename2 = "queue2.txt";
     char data[10];
     long pos1 = 0;
     long pos2 = 0;
+
+    sprintf(data, "%d", start->current_character);
+    writeToQueue(data, filename1);
+    sprintf(data, "%c", start->value_of_field);
+    writeToQueue(data, filename2);
 
     while ( buffer ) {
         fseek( file, x, SEEK_SET );
