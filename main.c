@@ -16,7 +16,7 @@ int main( int argc, char* argv[] ) {
     len_of_line = bfs_traverse_file(file_name);
 
     printf("After traverse\n");
-
+    remove("queue1.txt"); remove("queue2.txt");
     backtrack(file_name, start->current_character, end->current_character, len_of_line);
 
     printf("output created\n");

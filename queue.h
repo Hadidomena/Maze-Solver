@@ -18,4 +18,6 @@ void enqueue(Queue* q, position value);
 position dequeue(Queue* q);
 int isEmpty(Queue* q);
 void destroyQueue(Queue* q);
+void writeToQueue(const char *data, const char *filename);
+char *readFromQueue(const char *filename, long *pos);
 #endif
