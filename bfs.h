@@ -3,4 +3,5 @@
 #include "movement.h"
 #include "queue.h"
 void bfs_traverse_file(char* maze);
+void reverseLines();
 #endif

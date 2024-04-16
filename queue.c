@@ -30,9 +30,9 @@ void enqueue(Queue* q, position value) {
 
 // Function to remove an element from the queue
 position dequeue(Queue* q) {
-    if (q->front == NULL)
+    if (q->front == NULL) {
         exit(EXIT_FAILURE);
-
+    }
     Node* temp = q->front;
     position value = temp->value;
     q->front = q->front->next;
