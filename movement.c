@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// Function to create position
 position * create( int current_character, char value_of_field ) {
     position * curr_position = (position *) malloc(sizeof(position));
     curr_position->current_character = current_character;
@@ -9,6 +10,7 @@ position * create( int current_character, char value_of_field ) {
     return curr_position;
 }
 
+// Function to find start in maze
 position * find_start(char * maze) {
     FILE * file;
     file = fopen(maze, "r+");
@@ -24,6 +26,7 @@ position * find_start(char * maze) {
     return create( x, 'a');
 }
 
+// Function to find end in file
 position * find_end(char * maze) {
     FILE * file;
     file = fopen(maze, "r+");
@@ -38,6 +41,8 @@ position * find_end(char * maze) {
     }
     return create( x, 'K');
 }
+
+// Function to free position
 void free_position(position *pos) {
     free(pos);
 }

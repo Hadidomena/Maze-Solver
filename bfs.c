@@ -4,17 +4,16 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+// Function to create route from start to end
 void reverseLines() {
     int ch; int i; int count;
 
-    // Open the output file for reading
     FILE *outputFile = fopen("output.txt", "r+");
     if (outputFile == NULL) {
         printf("Error opening output file.\n");
         return;
     }
 
-    // Open the instructions file for writing
     FILE *instructionsFile = fopen("instructions.txt", "w+");
     if (instructionsFile == NULL) {
         printf("Error opening instructions file.\n");
@@ -46,6 +45,7 @@ void reverseLines() {
     fclose(instructionsFile);
 }
 
+// Function to create route from the end to start
 void backtrack(char * maze, int end, int start, int len_of_line ) {
     FILE * file = fopen(maze, "r+"); char buffer[1]; int current = start;
     char current_char = 'a'; bool is_first = true;
@@ -174,6 +174,8 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
     fprintf(output, "Start\n");
     fclose(output);
 }
+
+// Function to seed maze with values
 int bfs_traverse_file(char* maze) {
     int x = 0; FILE* file; int new[4]; int len_of_line; char buffer[1];
     file = fopen(maze, "r+");
@@ -209,7 +211,6 @@ int bfs_traverse_file(char* maze) {
         curr_int = atoi(data);
         readFromQueue(filename2, &pos2, data, sizeof(data));
         curr_char = data[0];
-        printf("%s\n", data);
 
         if ( curr_int != start->current_character ) {
             fseek( file, curr_int, SEEK_SET);
