@@ -6,7 +6,7 @@
 
 // Function to create route from start to end
 void reverseLines() {
-    int ch; int i; int count;
+    int ch, i, count;
 
     FILE *outputFile = fopen("output.txt", "r+");
     if (outputFile == NULL) {
@@ -25,16 +25,21 @@ void reverseLines() {
 
     fseek(outputFile, 0, SEEK_END);
 
-    while (ftell(outputFile) > 1 ){
+    while (ftell(outputFile) > 1 ) {
+
         fseek(outputFile, -2, SEEK_CUR);
-        if (ftell(outputFile) <= 2) {break;}
+        if (ftell(outputFile) <= 2) {
+            break;
+        }
         ch = fgetc(outputFile);
         count = 0;
-        while(ch != '\n'){
+        while (ch != '\n') {
             line[count++] = ch;
-            if(ftell(outputFile) < 2) {break;}
+            if(ftell(outputFile) < 2) {
+                break;
+            }
             fseek(outputFile, -2, SEEK_CUR);
-            ch =fgetc(outputFile);
+            ch = fgetc(outputFile);
         }
         for (i = count -1 ; i >= 0 && count > 0  ; i--) {
             fprintf(instructionsFile, "%c", line[i]);
@@ -47,12 +52,23 @@ void reverseLines() {
 
 // Function to create route from the end to start
 void backtrack(char * maze, int end, int start, int len_of_line ) {
-    FILE * file = fopen(maze, "r+"); char buffer[1]; int current = start;
-    char current_char = 'a'; bool is_first = true;
-    int direction; int previous_direction; int length = 0;
+    FILE * file = fopen(maze, "r+");
+    char buffer[1];
+    int current = start;
+    char current_char = 'a';
+    bool is_first = true;
+    int direction;
+    int previous_direction;
+    int length = 0;
 
     FILE * output = fopen("output.txt", "w+");
-    fprintf(output, "Stop\n");
+    fprintf(output, "STOP\n");
+
+    if (start % len_of_line == len_of_line - 2) {
+        previous_direction = 0;
+    } else {
+        previous_direction = 3;
+    }
 
     while ( true ) {
 
@@ -92,7 +108,7 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 current_char = buffer[0];
                 direction = 3;
             }
-            previous_direction = direction;
+
             is_first = false;
 
         } else {
@@ -112,6 +128,7 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 direction = 0;
             } else if ( buffer[0] == 'P' ) {
                 direction = 0;
+                length++;
                 break ;
             }
 
@@ -123,6 +140,7 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 direction = 1;
             } else if ( buffer[0] == 'P' ) {
                 direction = 1;
+                length++;
                 break ;
             }
 
@@ -134,6 +152,7 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 direction = 2;
             } else if ( buffer[0] == 'P' ) {
                 direction = 2;
+                length++;
                 break ;
             }
 
@@ -145,16 +164,17 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
                 direction = 3;
             } else if ( buffer[0] == 'P' ) {
                 direction = 3;
+                length++;
                 break ;
             }
 
         }
         if ( direction != previous_direction ) {
-            fprintf(output, "Forward %i\n", length);
+            fprintf(output, "FORWARD %i\n", length > 0 ? length : 1);
             if ( previous_direction == (direction + 1) % 4 ) {
-                fprintf(output, "Turn Left\n");
+                fprintf(output, "TURN LEFT\n");
             } else {
-                fprintf(output, "Turn Right\n");
+                fprintf(output, "TURN RIGHT\n");
             }
             length = 1;
         } else {
@@ -162,27 +182,34 @@ void backtrack(char * maze, int end, int start, int len_of_line ) {
         }
     }
     if ( direction != previous_direction ) {
-        fprintf(output, "Forward %i\n", length + 1);
+        fprintf(output, "FORWARD %i\n", length - 1);
         if ( previous_direction == (direction + 1) % 4 ) {
-            fprintf(output, "Turn Left\nForward 1\n");
+            fprintf(output, "TURN LEFT\nFORWARD 2\n");
         } else {
-            fprintf(output, "Turn Right\nForward 1\n");
+            fprintf(output, "TURN RIGHT\nFORWARD 2\n");
         }
     } else {
-        fprintf(output, "Forward %i\n", length + 1);
+        fprintf(output, "FORWARD %i\n", length + 1);
     }
-    fprintf(output, "Start\n");
+    fprintf(output, "START\n");
     fclose(output);
 }
 
 // Function to seed maze with values
 int bfs_traverse_file(char* maze) {
-    int x = 0; FILE* file; int new[4]; int len_of_line; char buffer[1];
+    int x = 0;
+    FILE* file;
+    int new[4];
+    int len_of_line;
+    char buffer[1];
+
     file = fopen(maze, "r+");
     position * start = find_start(maze);
     position * end = find_end(maze);
+
     position current;
-    int curr_int; char curr_char;
+    int curr_int;
+    char curr_char;
 
     const char *filename1 = "queue1.txt";
     const char *filename2 = "queue2.txt";
